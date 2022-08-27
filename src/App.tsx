@@ -1,10 +1,11 @@
 import "./App.css";
 import { useEffect, useState } from "react";
+import moment from 'moment'
 
 function App() {
   const [name, setName] = useState<string>("");
   const [amount, setAmount] = useState<string>("1");
-  const [cooking_date, setCookingDate] = useState<string>('2022-08-25');
+  const [cooking_date, setCookingDate] = useState<string>('');
   const [cooking_by, setCookingBy] = useState<string>();
   const [list, setList] = useState<[]>([]);
   const [deleteList, setDeleteList] = useState<[number]>([0]);
@@ -15,10 +16,12 @@ function App() {
     .then((res) => res.json())
     .then((res)=>{
       setList(res.list)})
-    .then(()=>{
-      let date = new Date();
-      setCookingDate(date.toISOString().split('T')[0]);
-    })
+      .then(()=>{
+        let dateNow = moment().format();
+        console.log(dateNow.split('T')[0])
+        setCookingDate(dateNow.split('T')[0]);
+        console.log(cooking_date);
+      })
   }
   , [renderTrigger]);
 
