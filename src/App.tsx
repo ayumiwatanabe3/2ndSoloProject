@@ -22,7 +22,7 @@ function App() {
   }
   , [renderTrigger]);
 
-  const amountList = ["1","1.5","2","2.5","3"];
+  const amountList = ["1","1.5","2","2.5","3","4"];
 
   const amountElements = amountList.map((elements, index) => {
     return (
@@ -92,8 +92,8 @@ function App() {
       body: JSON.stringify(deleteList),
       })
       console.log("削除完了")
-
-      setRenderTrigger(renderTrigger+1)
+      setDeleteList([0])
+      setRenderTrigger(renderTrigger+1);
   }
 
   return (
