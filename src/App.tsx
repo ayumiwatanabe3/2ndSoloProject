@@ -10,7 +10,6 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 
-
 function App() {
   const [name, setName] = useState<string>("");
   const [amount, setAmount] = useState<string>("1");
@@ -25,6 +24,7 @@ function App() {
     .then((res) => res.json())
     .then((res)=>{
       setList(res.list)})
+
     .then(()=>{
       let dateNow = moment().format();
       console.log(dateNow.split('T')[0])
@@ -104,7 +104,8 @@ function App() {
       body: JSON.stringify(deleteList),
       })
       console.log("削除完了")
-      setRenderTrigger(renderTrigger+1)
+      setDeleteList([0])
+      setRenderTrigger(renderTrigger+1);
       window.location.reload();
   }
 
