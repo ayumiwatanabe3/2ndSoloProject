@@ -1,6 +1,14 @@
 import "./App.css";
+import ButtonAppBar from './Bar';
 import { useEffect, useState } from "react";
 import moment from 'moment'
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Button from '@mui/material/Button';
 
 function App() {
   const [name, setName] = useState<string>("");
@@ -16,24 +24,25 @@ function App() {
     .then((res) => res.json())
     .then((res)=>{
       setList(res.list)})
-      .then(()=>{
-        let dateNow = moment().format();
-        console.log(dateNow.split('T')[0])
-        setCookingDate(dateNow.split('T')[0]);
-        console.log(cooking_date);
-      })
+
+    .then(()=>{
+      let dateNow = moment().format();
+      console.log(dateNow.split('T')[0])
+      setCookingDate(dateNow.split('T')[0]);
+      console.log(cooking_date);
+    })
   }
   , [renderTrigger]);
 
-  const amountList = ["1","1.5","2","2.5","3","4"];
+  // const amountList = ["1","1.5","2","2.5","3","4"];
 
-  const amountElements = amountList.map((elements, index) => {
-    return (
-      <option value={elements} key={index}>
-        {elements}
-      </option>
-    );
-  });
+  // const amountElements = amountList.map((elements, index) => {
+  //   return (
+  //     <option value={elements} key={index}>
+  //       {elements}
+  //     </option>
+  //   );
+  // });
 
   const requestSend =()=> {
     const sendObj = {
@@ -97,17 +106,27 @@ function App() {
       console.log("削除完了")
       setDeleteList([0])
       setRenderTrigger(renderTrigger+1);
+      window.location.reload();
   }
 
   return (
     <>
-    <header className="header">食べてね😋</header>
-    <div className="form">
-      料理名：<input type="text" placeholder="料理名" onChange={(e)=>setName(e.target.value)}></input><br/>
-      作った人：<input type="text" placeholder="だれが" onChange={(e)=>setCookingBy(e.target.value)}></input><br/>
-      量：<select onChange={(e)=>setAmount(e.target.value)}>{amountElements}</select><br/>
-      <div className="insertBotton"><button onClick={()=>{requestSend()}}>投稿</button></div>
+    <ButtonAppBar/>
+    {/* <header className="header">食べてね😋</header> */}
+    <main style={{backgroundImage:"url(/backGroundImage.png)"}}>
+    <div className="inputForm">
+    <TextFields setName={setName} setCookingBy={setCookingBy}/>
+    <AmountSelect setAmount={setAmount}/>
+    <div className="sendButton">
+    <SendButton requestSend={requestSend}/>
     </div>
+    </div>
+    {/* <div className="form"> */}
+      {/* 料理名：<input type="text" placeholder="料理名" onChange={(e)=>setName(e.target.value)}></input><br/> */}
+      {/* 作った人：<input type="text" placeholder="だれが" onChange={(e)=>setCookingBy(e.target.value)}></input><br/> */}
+      {/* 量：<select onChange={(e)=>setAmount(e.target.value)}>{amountElements}</select><br/> */}
+      {/* <div className="insertBotton"><button onClick={()=>{requestSend()}}>投稿</button></div> */}
+    {/* </div> */}
     <div className="table">
     <table>
       <tr>
@@ -120,9 +139,99 @@ function App() {
       </tr>
       {listElements}
     </table>
-    <div className="deleteBotton"><button  onClick={()=>{requestDelete()}}>削除</button></div>
+    <div className="deleteBotton">
+      <DeleteButton requestDelete={requestDelete}/>
+      {/* <button  onClick={()=>{requestDelete()}}>削除</button> */}
+      </div>
     </div>
+    </main>
     </>
   );}
 
 export default App;
+
+type Props1 ={
+  setName : Function,
+  setCookingBy:Function,
+}
+
+const TextFields : React.FC <Props1> = ({setName,setCookingBy})=> {
+  return (
+    <Box
+      component="form"
+      sx={{
+        "& > :not(style)": { m: 0.5, width: "25ch"}
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField
+        type="text"
+        id="name"
+        label="料理名"
+        variant="outlined"
+        className="textfield"
+        onChange={(e)=>setName(e.target.value)}
+      />
+      <br/>
+      <TextField
+        type="text"
+        id="cookingBy"
+        label="作った人"
+        variant="outlined"
+        className="textfield"
+        onChange={(e)=>setCookingBy(e.target.value)}
+      />
+    </Box>
+  );
+}
+
+type Props2 ={
+  setAmount:Function
+}
+
+const AmountSelect : React.FC <Props2>=({setAmount})=> {
+  return (
+    <Box sx={{
+      "& > :not(style)": { m: 1, width: "10ch" }
+    }} >
+      <FormControl  >
+        <InputLabel id="demo-simple-select-label">量</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          // value={age}
+          label="Amount"
+          className="textfield"
+          onChange={(e)=>setAmount(e.target.value)}
+        >
+          <MenuItem value={1}>1人分</MenuItem>
+          <MenuItem value={2}>2人分</MenuItem>
+          <MenuItem value={3}>3人分</MenuItem>
+          <MenuItem value={4}>4人分</MenuItem>
+
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+
+type Props3 ={
+  requestSend:Function
+}
+
+const SendButton : React.FC <Props3> = ({requestSend})=>{
+  return (
+      <Button variant="contained" onClick={()=>requestSend()}>リストに追加</Button>
+  );
+}
+
+type Props4 ={
+  requestDelete:Function
+}
+
+const DeleteButton : React.FC <Props4> = ({requestDelete})=>{
+  return (
+      <Button variant="contained" onClick={()=>requestDelete()}>削除</Button>
+  );
+}
