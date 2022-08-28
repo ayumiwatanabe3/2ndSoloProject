@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 function App() {
   const [name, setName] = useState<string>("");
   const [amount, setAmount] = useState<string>("1");
-  const [cooking_date, setCookingDate] = useState<string>('');
+  const [cooking_date, setCookingDate] = useState<string>('2022-01-01');
   const [cooking_by, setCookingBy] = useState<string>();
   const [list, setList] = useState<[]>([]);
   const [deleteList, setDeleteList] = useState<[number]>([0]);
@@ -57,7 +57,10 @@ function App() {
         headers:{"Content-type": "application/json"},
         body: JSON.stringify(sendObj)
       })
-      .then(()=>setRenderTrigger(renderTrigger+1))
+      .then(()=>{
+        setRenderTrigger(renderTrigger+1)
+        window.location.reload();
+      })
   }
 
   const formatDate = (date: Date): string => {
@@ -168,7 +171,7 @@ const TextFields : React.FC <Props1> = ({setName,setCookingBy})=> {
       <TextField
         type="text"
         id="name"
-        label="料理名"
+        label="どんな料理？"
         variant="outlined"
         className="textfield"
         onChange={(e)=>setName(e.target.value)}
@@ -177,7 +180,7 @@ const TextFields : React.FC <Props1> = ({setName,setCookingBy})=> {
       <TextField
         type="text"
         id="cookingBy"
-        label="作った人"
+        label="だれが作った？"
         variant="outlined"
         className="textfield"
         onChange={(e)=>setCookingBy(e.target.value)}
