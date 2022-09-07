@@ -16,11 +16,13 @@ app.use(
 app.use(express.static(path.resolve(__dirname, "..", "build")));
 
 app.get("/api/list", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const list = await db("foods").select("*");
   res.json({ list });
 });
 
 app.post("/api/foods", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   await db("foods")
     .insert(req.body)
     .then(() => {
@@ -29,6 +31,7 @@ app.post("/api/foods", async (req, res) => {
 });
 
 app.patch("/api/foods", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   await db("foods").whereIn("id", req.body).del();
 });
 
